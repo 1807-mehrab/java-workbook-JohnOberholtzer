@@ -2,7 +2,10 @@ package com.revature.eval.java.core;
 
 import java.time.temporal.Temporal;
 import java.util.List;
+import java.util.LinkedList;
 import java.util.Map;
+import java.util.HashSet;
+import java.util.HashMap;
 
 public class EvaluationService {
 
@@ -31,7 +34,20 @@ public class EvaluationService {
 	 */
 	public String acronym(String phrase) {
 		// TODO Write an implementation for this method declaration
-		return null;
+		String output = "";
+		String words[] = phrase.split(" ");
+		for (String w : words) {
+			if (w.contains("-")){
+				String words2[] = w.split("-");
+				for (String w2 : words2) {
+					output += w2.charAt(0);
+				}
+			} else {
+				output += w.charAt(0);
+			}
+			
+		}
+		return output.toUpperCase();
 	}
 
 	/**
@@ -84,18 +100,17 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return ((sideOne==sideTwo)&&(sideTwo==sideThree));
 		}
 
 		public boolean isIsosceles() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return (((sideOne==sideTwo)&&(sideTwo!=sideThree)) |
+				   ((sideOne!=sideTwo)&&(sideTwo==sideThree))  |
+				   ((sideOne==sideThree)&&(sideTwo!=sideThree)));
 		}
 
 		public boolean isScalene() {
-			// TODO Write an implementation for this method declaration
-			return false;
+			return ((sideOne!=sideTwo)&&(sideTwo!=sideThree)&&(sideOne!=sideThree));
 		}
 
 	}
@@ -116,8 +131,66 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getScrabbleScore(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		int count = 0;
+		for (int i = 0; i < string.length(); i++) {
+			char c = string.charAt(i);
+			switch(c){
+			case 'A': count += 1 ; break;
+			case 'a': count += 1 ; break;
+			case 'B': count += 3 ; break;
+			case 'b': count += 3 ; break;
+			case 'C': count += 3 ; break;
+			case 'c': count += 3 ; break;
+			case 'D': count += 2 ; break;
+			case 'd': count += 2 ; break;
+			case 'E': count += 1 ; break;
+			case 'e': count += 1 ; break;
+			case 'F': count += 4 ; break;
+			case 'f': count += 4 ; break;
+			case 'G': count += 2 ; break;
+			case 'g': count += 2 ; break;
+			case 'H': count += 4 ; break;
+			case 'h': count += 4 ; break;
+			case 'I': count += 1 ; break;
+			case 'i': count += 1 ; break;
+			case 'J': count += 8 ; break;
+			case 'j': count += 8 ; break;
+			case 'K': count += 5 ; break;
+			case 'k': count += 5 ; break;
+			case 'L': count += 1 ; break;
+			case 'l': count += 1 ; break;
+			case 'M': count += 3 ; break;
+			case 'm': count += 3 ; break;
+			case 'N': count += 1 ; break;
+			case 'n': count += 1 ; break;
+			case 'O': count += 1 ; break;
+			case 'o': count += 1 ; break;
+			case 'P': count += 3 ; break;
+			case 'p': count += 3 ; break;
+			case 'Q': count += 10 ; break;
+			case 'q': count += 10 ; break;
+			case 'R': count += 1 ; break;
+			case 'r': count += 1 ; break;
+			case 'S': count += 1 ; break;
+			case 's': count += 1 ; break;
+			case 'T': count += 1 ; break;
+			case 't': count += 1 ; break;
+			case 'U': count += 1 ; break;
+			case 'u': count += 1 ; break;
+			case 'V': count += 4 ; break;
+			case 'v': count += 4 ; break;
+			case 'W': count += 4 ; break;
+			case 'w': count += 4 ; break;
+			case 'X': count += 8 ; break;
+			case 'x': count += 8 ; break;
+			case 'Y': count += 4 ; break;
+			case 'y': count += 4 ; break;
+			case 'Z': count += 10 ; break;
+			case 'z': count += 10 ; break;
+
+			}
+		}
+		return count;
 	}
 
 	/**
@@ -152,8 +225,13 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String finalstring = string.replace("-", "");
+		finalstring = finalstring.replace("-", "");
+		finalstring = finalstring.replace(" ", "");
+		if (finalstring.charAt(0) == '1') {
+			
+		}
+		return finalstring;
 	}
 
 	/**
@@ -166,8 +244,18 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Map<String, Integer> wordCount(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		Map<String, Integer> output = new HashMap<String,Integer>();
+		String[] words = string.split(" ");
+		for (String word : words) {
+			word = word.replace(",", "");
+			if (output.containsKey(word)) {
+				output.put(word, output.get(word)+1);
+			} else {
+				output.put(word, 1);
+			}
+			
+		}
+		return output;
 	}
 
 	/**
