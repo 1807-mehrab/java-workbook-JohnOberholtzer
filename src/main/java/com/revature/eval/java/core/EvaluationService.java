@@ -226,6 +226,8 @@ public class EvaluationService {
 	 */
 	public String cleanPhoneNumber(String string) {
 		String finalstring = string.replace("-", "");
+		finalstring = finalstring.replace("(", "");
+		finalstring = finalstring.replace(")", "");
 		finalstring = finalstring.replace("-", "");
 		finalstring = finalstring.replace(" ", "");
 		if (finalstring.charAt(0) == '1') {
@@ -297,8 +299,24 @@ public class EvaluationService {
 		private List<T> sortedList;
 
 		public int indexOf(T t) {
+			if(sortedList.size() != 1) {
+				int first = sortedList.subList(0, sortedList.size()/2).indexOf(t);
+				int second = sortedList.subList(sortedList.size()/2, sortedList.size()).indexOf(t);
+				if (first != -1) {
+					return first;
+				} else if(second != -1) {
+					return second + sortedList.size()/2;
+				} else {
+					return -1;
+				}
+			} else {
+				if (sortedList.get(0) == t){
+					return 0;
+				} else {
+					return -1;
+				}
+			}
 			// TODO Write an implementation for this method declaration
-			return 0;
 		}
 
 		public BinarySearch(List<T> sortedList) {
@@ -334,8 +352,35 @@ public class EvaluationService {
 	 * @return
 	 */
 	public String toPigLatin(String string) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		String[] words = string.split(" ");
+		String[] newwords = new String[words.length];
+		HashSet<Character> vowels = new HashSet<Character>();
+		vowels.add('a');
+		vowels.add('A');
+		vowels.add('e');
+		vowels.add('E');
+		vowels.add('i');
+		vowels.add('I');
+		vowels.add('o');
+		vowels.add('O');
+		vowels.add('u');
+		vowels.add('U');
+		for (int index = 0; index < words.length; index++) {
+			if (vowels.contains(words[index].charAt(0))){
+				newwords[index] = words[index];
+				newwords[index] += "ay";		
+			} else {
+				newwords[index] = words[index].substring(1, words[index].length());
+				newwords[index] += words[index].charAt(0);
+				newwords[index] += "ay";
+			}
+			
+		}
+		String output = "";
+		for (String word : newwords) {
+			output += word + " ";
+		}
+		return output.trim();
 	}
 
 	/**
@@ -354,7 +399,16 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isArmstrongNumber(int input) {
-		// TODO Write an implementation for this method declaration
+		int digits = 1;
+		int inp = input;
+		while (input > 9) {
+			input = input / 10;
+			digits += 1;
+		}
+		int[] digitArr = new int[digits];
+		for (int i = 0; i < digits; i++) {
+			digitArr[i] = ((input / (10^i)));
+		}
 		return false;
 	}
 
