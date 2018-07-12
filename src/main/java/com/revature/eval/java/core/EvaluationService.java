@@ -261,7 +261,7 @@ public class EvaluationService {
 	 */
 	public Map<String, Integer> wordCount(String string) {
 		Map<String, Integer> output = new HashMap<String,Integer>();
-		String[] words = string.split(" ");
+		String[] words = string.split("\\s|\\n");
 		for (String word : words) {
 			word = word.replace(",", "");
 			if (output.containsKey(word)) {
@@ -580,8 +580,26 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String output = "";
+			for (int i = 0; i < string.length(); i++) {
+				int c = (int)(string.charAt(i));
+				if ((c > 96)&&(c<123)) {
+					//lower case scenario
+					char n = (char)(((-1*(c - 96))+27)+96);
+					output += n;
+				} else if ((c > 64)&&(c < 91)) {
+					//upper case scenario
+					char n = (char)(((-1*(c - 64))+27)+64);
+					output += n;
+				} else if ((c > 47)&&(c < 58)) {
+					//Number
+					output += string.charAt(i);
+				} else {
+					//not a character
+				}
+				
+			}
+			return output;
 		}
 
 		/**
@@ -591,8 +609,7 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			return encode(string);
 		}
 	}
 
