@@ -5,6 +5,7 @@ import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
 import java.util.HashSet;
+import java.util.ArrayList;
 import java.util.HashMap;
 
 public class EvaluationService {
@@ -100,17 +101,24 @@ public class EvaluationService {
 		}
 
 		public boolean isEquilateral() {
-			return ((sideOne==sideTwo)&&(sideTwo==sideThree));
+			Double a = getSideOne();
+			Double b = getSideTwo();
+			Double c = getSideThree();			
+			if ((Double.compare(a, b)==0)&(Double.compare(b, c)==0)) {				
+				return true;
+			} else { 
+				return false; 
+			}
 		}
 
 		public boolean isIsosceles() {
-			return (((sideOne==sideTwo)&&(sideTwo!=sideThree)) |
-				   ((sideOne!=sideTwo)&&(sideTwo==sideThree))  |
-				   ((sideOne==sideThree)&&(sideTwo!=sideThree)));
+			return (((getSideOne()==getSideTwo())&(getSideTwo()!=getSideThree())) |
+				   ((getSideOne()!=getSideTwo())&(getSideTwo()==getSideThree()))  |
+				   ((getSideOne()==getSideThree())&(getSideTwo()!=getSideThree())));
 		}
 
 		public boolean isScalene() {
-			return ((sideOne!=sideTwo)&&(sideTwo!=sideThree)&&(sideOne!=sideThree));
+			return ((getSideOne()!=getSideTwo())&(getSideTwo()!=getSideThree())&(getSideOne()!=getSideThree()));
 		}
 
 	}
@@ -187,6 +195,7 @@ public class EvaluationService {
 			case 'y': count += 4 ; break;
 			case 'Z': count += 10 ; break;
 			case 'z': count += 10 ; break;
+			default: break;
 
 			}
 		}
@@ -225,13 +234,18 @@ public class EvaluationService {
 	 * NANP-countries, only 1 is considered a valid country code.
 	 */
 	public String cleanPhoneNumber(String string) {
+		
 		String finalstring = string.replace("-", "");
 		finalstring = finalstring.replace("(", "");
 		finalstring = finalstring.replace(")", "");
 		finalstring = finalstring.replace("-", "");
 		finalstring = finalstring.replace(" ", "");
+		finalstring = finalstring.replace(".", "");
 		if (finalstring.charAt(0) == '1') {
-			
+			finalstring = finalstring.substring(1, finalstring.length());
+		}
+		if (finalstring.length() > 11) {
+			throw new IllegalArgumentException();
 		}
 		return finalstring;
 	}
@@ -401,15 +415,21 @@ public class EvaluationService {
 	public boolean isArmstrongNumber(int input) {
 		int digits = 1;
 		int inp = input;
-		while (input > 9) {
-			input = input / 10;
+		while (inp > 9) {
+			inp = inp / 10;
 			digits += 1;
 		}
+		inp = input;
 		int[] digitArr = new int[digits];
-		for (int i = 0; i < digits; i++) {
-			digitArr[i] = ((input / (10^i)));
+		for (int i = digits-1; i >= 0; i--) {
+			digitArr[i] = (int) ((inp / Math.pow(10, i)));
+			inp = (int) ((input % Math.pow(10, i)));
 		}
-		return false;
+		int sum = 0;
+		for (int i = 0; i < digits; i++) {
+			sum += Math.pow(digitArr[i], digits);
+		}
+		return (sum == input);
 	}
 
 	/**
@@ -423,8 +443,20 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		List<Long> primes = new ArrayList<Long>();
+		for(long test = 2; test < l-1; test++) {
+			List<Long> divisibles = new ArrayList<Long>();
+			for(long determine = 2; determine < test-1; determine++) {
+				if (test%determine==0) {
+					divisibles.add(determine);
+				}
+			}
+			if (divisibles.size() == 0) {
+				primes.add(test);
+			}
+			
+		}
+		return primes;
 	}
 
 	/**
@@ -462,8 +494,14 @@ public class EvaluationService {
 		}
 
 		public String rotate(String string) {
-			// TODO Write an implementation for this method declaration
-			return null;
+			String finalstring ="";
+			for (int i = 0; i < string.length(); i++) {
+				char c = string.charAt(i);
+				c += key;
+				if(c >= 'z'){ c -= 26; }
+				finalstring += c;
+			}
+			return finalstring;
 		}
 
 	}
@@ -481,8 +519,26 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		List<Integer> primes = new ArrayList<Integer>();
+		int stillneedprimes = i;
+		while (stillneedprimes != 0) {
+			int current = 2;
+			for(int test = 2; test < current; test++) {
+				List<Integer> divisibles = new ArrayList<Integer>();
+				for(int determine = 2; determine < test-1; determine++) {
+					if (test%determine==0) {
+						divisibles.add(determine);
+					}
+				}
+				if (divisibles.size() == 1) {
+					primes.add(test);
+					stillneedprimes -=1;
+				}
+			}
+			current +=1;
+		}
+		
+		return primes.get(i);
 	}
 
 	/**
