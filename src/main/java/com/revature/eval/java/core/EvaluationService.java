@@ -443,20 +443,26 @@ public class EvaluationService {
 	 * @return
 	 */
 	public List<Long> calculatePrimeFactorsOf(long l) {
-		List<Long> primes = new ArrayList<Long>();
-		for(long test = 2; test < l-1; test++) {
-			List<Long> divisibles = new ArrayList<Long>();
-			for(long determine = 2; determine < test-1; determine++) {
-				if (test%determine==0) {
+		List<Long> primefactors = new LinkedList<Long>();
+		List<Long> factors = new LinkedList<Long>();
+		for (Long iter = 1L; iter < l; iter++) {
+			if (l%iter == 0) {
+				factors.add(iter);
+				factors.add(l/iter);
+			}
+		}
+		for (Long fact : factors) {
+			List<Integer> divisibles = new LinkedList<Integer>();
+			for(int determine = 1; determine < fact; determine++) {
+				if (fact%determine==0) {
 					divisibles.add(determine);
 				}
 			}
-			if (divisibles.size() == 0) {
-				primes.add(test);
+			if (divisibles.size() == 1) {
+				primefactors.add(fact);
 			}
-			
 		}
-		return primes;
+		return primefactors;
 	}
 
 	/**
@@ -519,26 +525,26 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int calculateNthPrime(int i) {
+		if (i <= 0) {throw new IllegalArgumentException();}
 		List<Integer> primes = new ArrayList<Integer>();
+		int current = 2;
 		int stillneedprimes = i;
-		while (stillneedprimes != 0) {
-			int current = 2;
-			for(int test = 2; test < current; test++) {
-				List<Integer> divisibles = new ArrayList<Integer>();
-				for(int determine = 2; determine < test-1; determine++) {
-					if (test%determine==0) {
-						divisibles.add(determine);
-					}
+		while (stillneedprimes > 0) {
+			List<Integer> divisibles = new ArrayList<Integer>();
+			for(int determine = 1; determine < current; determine++) {
+				if (current%determine==0) {
+					divisibles.add(determine);
 				}
-				if (divisibles.size() == 1) {
-					primes.add(test);
-					stillneedprimes -=1;
-				}
+			}
+			if (divisibles.size() == 1) {
+				primes.add(current);
+				stillneedprimes -=1;
 			}
 			current +=1;
 		}
-		
-		return primes.get(i);
+		for (int x = 0; x < primes.size();x++) {
+		}
+		return primes.get(i-1);
 	}
 
 	/**
