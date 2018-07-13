@@ -254,6 +254,11 @@ public class EvaluationService {
 		if (finalstring.length() > 11) {
 			throw new IllegalArgumentException();
 		}
+		for (int i = 0; i < finalstring.length();i++) {
+			if(!Character.isDigit(finalstring.charAt(i))) {
+				throw new IllegalArgumentException();
+			}
+		}
 		return finalstring;
 	}
 
@@ -893,8 +898,62 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int solveWordProblem(String string) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		String input = string.replace("?","");
+		String[] words = input.split(" ");
+		HashSet<String> operands = new HashSet<String>();
+		String currentOperation = "";
+		int[] values = new int[2];
+		int loc = 0;
+		operands.add("plus");
+		operands.add("minus");
+		operands.add("multiplied");
+		operands.add("divided");
+		for (String word: words) {
+			boolean negative = false;
+			String testword = word.toLowerCase();
+			if (testword.charAt(0) == '-'){
+				negative = true;
+				testword = testword.substring(1);
+			}
+			if(operands.contains(testword)) {
+				currentOperation = testword;
+			}
+			else if((testword == "what")|(testword=="is")|(testword=="by")){
+				//Ignore these words
+			} else {
+				//Assume integer
+				int val = 0;
+				try {
+					//System.out.println(testword);
+					val = Integer.parseInt(testword);
+					if(!negative) {
+						values[loc] = val;
+					} else {
+						values[loc] = (val * -1);
+					}
+					loc += 1;
+				} catch (NumberFormatException ex) {
+					
+				}
+				
+				
+			}
+		}
+		//System.out.print(values[0] + " " + currentOperation +" " + values[1] + "\n");
+		switch(currentOperation){
+			case "multiplied": return values[0] * values[1];
+			case "divided":
+				int x = 0;
+				try {
+					x = values[0] / values[1];
+				} catch (ArithmeticException ex) {
+					
+				}
+				return x;
+			case "plus": return values[0] + values[1];
+			case "minus": return values[0] * values[1];
+			default: return 0;
+		}
 	}
 
 }
