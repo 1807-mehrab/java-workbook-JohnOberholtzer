@@ -951,7 +951,7 @@ public class EvaluationService {
 				}
 				return x;
 			case "plus": return values[0] + values[1];
-			case "minus": return values[0] * values[1];
+			case "minus": return values[0] - values[1];
 			default: return 0;
 		}
 	}
