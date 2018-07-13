@@ -580,26 +580,28 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String encode(String string) {
+			String input = string.replace(" ","");
+			input = input.replace(",","");
 			String output = "";
-			for (int i = 0; i < string.length(); i++) {
-				int c = (int)(string.charAt(i));
+			for (int i = 0; i < input.length(); i++) {
+				int c = (int)(input.charAt(i));
 				if ((c > 96)&&(c<123)) {
 					//lower case scenario
 					char n = (char)(((-1*(c - 96))+27)+96);
 					output += n;
 				} else if ((c > 64)&&(c < 91)) {
 					//upper case scenario
-					char n = (char)(((-1*(c - 64))+27)+64);
+					char n = (char)(((-1*(c - 64))+27)+96);
 					output += n;
 				} else if ((c > 47)&&(c < 58)) {
 					//Number
-					output += string.charAt(i);
+					output += input.charAt(i);
 				} else {
 					//not a character
 				}
-				
+				if(((i+1)%5)==0) {output+=" ";}
 			}
-			return output;
+			return output.trim();
 		}
 
 		/**
@@ -609,7 +611,27 @@ public class EvaluationService {
 		 * @return
 		 */
 		public static String decode(String string) {
-			return encode(string);
+			String input = string.replace(" ","");
+			input = input.replace(",","");
+			String output = "";
+			for (int i = 0; i < input.length(); i++) {
+				int c = (int)(input.charAt(i));
+				if ((c > 96)&&(c<123)) {
+					//lower case scenario
+					char n = (char)(((-1*(c - 96))+27)+96);
+					output += n;
+				} else if ((c > 64)&&(c < 91)) {
+					//upper case scenario
+					char n = (char)(((-1*(c - 64))+27)+96);
+					output += n;
+				} else if ((c > 47)&&(c < 58)) {
+					//Number
+					output += input.charAt(i);
+				} else {
+					//not a character
+				}
+			}
+			return output;
 		}
 	}
 
@@ -636,8 +658,30 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isValidIsbn(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String input = string.replace("-", "");
+		if (input.length() == 10) {
+			int[] numbers = new int[10];
+			int finalcount = 0;
+			for (int i = 0; i < 10; i++) {
+				if (Character.isLetter(input.charAt(i))){
+					if(((input.charAt(i)=='X')|(input.charAt(i) == 'x'))&(i==9)) {
+						numbers[i] = 10;
+					} else {
+						return false;
+					}
+				} else {
+					numbers[i] = Integer.parseInt(input.substring(i, i+1));
+				}
+				finalcount += numbers[i] * i;
+			}
+			if (finalcount%11 == 0) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
 	}
 
 	/**
@@ -654,8 +698,23 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isPangram(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		String input = string.toLowerCase();
+		HashSet<Character> charset = new HashSet<Character>();
+		for (int i = 97; i < 123; i++) {
+			charset.add((char)i);
+		}
+		for (int i = 0; i < input.length(); i++) {
+			char c = input.charAt(i);
+			if(charset.contains(c)) {
+				charset.remove(c);
+			}
+		}
+		if (charset.size() == 0) {
+			
+			return true;
+		} else {
+			return false;
+		}
 	}
 
 	/**
