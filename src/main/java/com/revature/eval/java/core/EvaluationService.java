@@ -1,6 +1,13 @@
 package com.revature.eval.java.core;
 
+import java.time.Duration;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.Year;
+import java.time.temporal.ChronoField;
 import java.time.temporal.Temporal;
+import java.time.temporal.TemporalAmount;
+import java.time.temporal.UnsupportedTemporalTypeException;
 import java.util.List;
 import java.util.LinkedList;
 import java.util.Map;
@@ -726,8 +733,39 @@ public class EvaluationService {
 	 * @return
 	 */
 	public Temporal getGigasecondDate(Temporal given) {
-		// TODO Write an implementation for this method declaration
-		return null;
+		int year,month,day,hour,minute,second;
+		try {
+			year = given.get(ChronoField.YEAR);
+		} catch (UnsupportedTemporalTypeException ex) {
+			year = 0;
+		}
+		try {
+			month = given.get(ChronoField.MONTH_OF_YEAR);
+		} catch (UnsupportedTemporalTypeException ex) {
+			month = 0;
+		}
+		try {
+			day = given.get(ChronoField.DAY_OF_MONTH);
+		} catch (UnsupportedTemporalTypeException ex) {
+			day = 0;
+		}
+		try {
+			hour = given.get(ChronoField.CLOCK_HOUR_OF_DAY);
+		} catch (UnsupportedTemporalTypeException ex) {
+			hour = 0;
+		}
+		try {
+			minute = given.get(ChronoField.MINUTE_OF_HOUR);
+		} catch (UnsupportedTemporalTypeException ex) {
+			minute = 0;
+		}
+		try {
+			second = given.get(ChronoField.SECOND_OF_MINUTE);
+		} catch (UnsupportedTemporalTypeException ex) {
+			second = 0;
+		}
+		Temporal target = LocalDateTime.of(year,month,day,hour,minute,second).plus(Duration.ofSeconds(1000000000));
+		return target;
 	}
 
 	/**
@@ -744,8 +782,19 @@ public class EvaluationService {
 	 * @return
 	 */
 	public int getSumOfMultiples(int i, int[] set) {
-		// TODO Write an implementation for this method declaration
-		return 0;
+		HashSet<Integer> validmultiples = new HashSet<Integer>();
+		int output = 0;
+		for (int x = 0; x < i; x++) {
+			for (int test : set) {
+				if (x%test == 0) {
+					validmultiples.add(x);
+				}
+			}
+		}
+		for (int mult : validmultiples) {
+			output += mult;
+		}
+		return output;
 	}
 
 	/**
@@ -785,8 +834,35 @@ public class EvaluationService {
 	 * @return
 	 */
 	public boolean isLuhnValid(String string) {
-		// TODO Write an implementation for this method declaration
-		return false;
+		if (string.length() <= 1) {
+			return false;
+			//throw new IllegalArgumentException();
+		} else {
+			String input = string.replace("-", "");
+			input = string.replace(" ", "");
+			int finalsum = 0;
+			int[] numbers = new int[input.length()];
+			for (int i = 0; i < input.length(); i++) {
+				if (!Character.isDigit(input.charAt(i))){
+					return false;
+				} else {
+					numbers[i] = Integer.parseInt(input.substring(i, i+1));
+				}
+			}
+			for (int i = 0; i < input.length(); i++) {
+				if((i+1)%2==0) {
+					numbers[i] = numbers[i] * 2;
+					if (numbers[i] > 10) {
+						numbers[i] -= 9;
+					}
+					finalsum += numbers[i];
+				}
+			}
+			if (finalsum%10==0) {
+				return true;
+			}
+			return false;
+		}
 	}
 
 	/**
